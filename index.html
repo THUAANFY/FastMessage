@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechChat - Modern Messaging</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Login Screen -->
+        <div id="loginScreen" class="login-screen">
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="app-logo">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <h1>TechChat</h1>
+                    </div>
+                    <p>Modern messaging experience</p>
+                </div>
+                
+                <div class="login-form-container">
+                    <form id="loginForm">
+                        <div class="form-group">
+                            <label for="username">Your Name</label>
+                            <input type="text" id="username" placeholder="Enter your name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomId">Chat ID</label>
+                            <div class="input-with-button">
+                                <input type="text" id="roomId" placeholder="Enter chat ID or leave empty for new chat">
+                                <button type="button" id="generateRoomId" title="Generate random ID">
+                                    <i class="bi bi-dice-5"></i>
+                                </button>
+                            </div>
+                            <small>Share this ID with someone you want to chat with</small>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="bi bi-box-arrow-in-right"></i> Start Chatting
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Screen -->
+        <div id="chatScreen" class="chat-screen" style="display: none;">
+            <!-- Sidebar -->
+            <aside class="chat-sidebar">
+                <div class="sidebar-header">
+                    <div class="app-logo">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <h1>TechChat</h1>
+                    </div>
+                    <button id="toggleSidebar" class="icon-button" title="Toggle sidebar">
+                        <i class="bi bi-chevron-left"></i>
+                    </button>
+                </div>
+                
+                <div class="user-profile">
+                    <div id="currentUserAvatar" class="user-avatar large"></div>
+                    <div class="user-info">
+                        <h3 id="currentUserName">You</h3>
+                        <span class="user-status online">Online</span>
+                    </div>
+                </div>
+                
+                <div class="chat-info-section">
+                    <h4>Chat Information</h4>
+                    <div class="info-item">
+                        <i class="bi bi-hash"></i>
+                        <span>Chat ID: <span id="roomIdDisplay">svpfah</span></span>
+                        <button id="copyRoomLink" class="icon-button small" title="Copy chat link">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                    <div class="info-item">
+                        <i class="bi bi-people-fill"></i>
+                        <span>Participants: <span id="participantCount">2</span></span>
+                    </div>
+                    <div class="participant-list" id="participantList">
+                        <!-- Participants will be listed here -->
+                    </div>
+                </div>
+                
+                <div class="sidebar-footer">
+                    <button id="leaveChat" class="btn-outline">
+                        <i class="bi bi-box-arrow-left"></i> Leave Chat
+                    </button>
+                </div>
+            </aside>
+
+            <!-- Main Chat Area -->
+            <main class="chat-main">
+                <!-- Chat Header -->
+                <header class="chat-header">
+                    <button id="showSidebar" class="icon-button" title="Show sidebar">
+                        <i class="bi bi-list"></i>
+                    </button>
+                    
+                    <div class="chat-header-info">
+                        <div class="chat-with">
+                            <div id="chatWithAvatar" class="user-avatar"></div>
+                            <div class="chat-with-info">
+                                <h3 id="chatWithName">Chat Partner</h3>
+                                <span id="chatWithStatus" class="typing-status">online</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-actions">
+                        <button class="icon-button" title="Search messages">
+                            <i class="bi bi-search"></i>
+                        </button>
+                        <button class="icon-button" title="More options">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="chat-date-divider">
+                        <span>Today</span>
+                    </div>
+                    
+                    <!-- System messages -->
+                    <div class="system-message">
+                        <div class="system-message-content">Chat started</div>
+                    </div>
+                    
+                    <!-- Received message -->
+                    <div class="message-wrapper received">
+                        <div class="message-group">
+                            <div class="user-avatar small" style="background-color: #3498db;">D</div>
+                            <div class="message-content-group">
+                                <div class="message-bubble">Hey there! How's it going?</div>
+                                <div class="message-meta">
+                                    <span class="message-time">5:55 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Sent messages -->
+                    <div class="message-wrapper sent">
+                        <div class="message-group">
+                            <div class="message-content-group">
+                                <div class="message-bubble">Hi! I'm doing great, thanks for asking!</div>
+                                <div class="message-meta">
+                                    <span class="message-time">5:56 PM</span>
+                                    <span class="message-status">
+                                        <i class="bi bi-check2-all"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="message-wrapper sent">
+                        <div class="message-group">
+                            <div class="message-content-group">
+                                <div class="message-bubble">How about you?</div>
+                                <div class="message-meta">
+                                    <span class="message-time">5:56 PM</span>
+                                    <span class="message-status">
+                                        <i class="bi bi-check2-all"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Received message with emoji -->
+                    <div class="message-wrapper received">
+                        <div class="message-group">
+                            <div class="user-avatar small" style="background-color: #3498db;">D</div>
+                            <div class="message-content-group">
+                                <div class="message-bubble">I'm good too! Just working on some coding projects 💻</div>
+                                <div class="message-meta">
+                                    <span class="message-time">5:58 PM</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Typing indicator -->
+                    <div class="message-wrapper received typing-indicator-wrapper">
+                        <div class="message-group">
+                            <div class="user-avatar small" style="background-color: #3498db;">D</div>
+                            <div class="typing-indicator">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-container">
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                    <button id="attachButton" class="icon-button" title="Attach file">
+                        <i class="bi bi-paperclip"></i>
+                    </button>
+                    
+                    <div class="chat-input-wrapper">
+                        <div id="attachmentPreview" class="attachment-preview"></div>
+                        <input type="text" id="messageInput" placeholder="Type a message...">
+                        <button id="emojiButton" class="icon-button" title="Add emoji">
+                            <i class="bi bi-emoji-smile"></i>
+                        </button>
+                    </div>
+                    
+                    <button id="sendButton" class="icon-button send-button" title="Send message">
+                        <i class="bi bi-send-fill"></i>
+                    </button>
+                    
+                    <!-- Emoji Picker (Hidden by default) -->
+                    <div class="emoji-picker" id="emojiPicker" style="display: none;">
+                        <div class="emoji-picker-header">
+                            <h3>Emojis</h3>
+                            <button id="closeEmojiPicker" class="icon-button">
+                                <i class="bi bi-x"></i>
+                            </button>
+                        </div>
+                        <input type="text" class="emoji-search" placeholder="Search emojis..." id="emojiSearch">
+                        <div class="emoji-categories">
+                            <button data-category="recent" class="emoji-category active">
+                                <i class="bi bi-clock"></i>
+                            </button>
+                            <button data-category="smileys" class="emoji-category">
+                                <i class="bi bi-emoji-smile"></i>
+                            </button>
+                            <button data-category="objects" class="emoji-category">
+                                <i class="bi bi-laptop"></i>
+                            </button>
+                            <button data-category="symbols" class="emoji-category">
+                                <i class="bi bi-heart"></i>
+                            </button>
+                        </div>
+                        <div class="emoji-grid">
+                            <span class="emoji" data-emoji="😀">😀</span>
+                            <span class="emoji" data-emoji="😂">😂</span>
+                            <span class="emoji" data-emoji="😊">😊</span>
+                            <span class="emoji" data-emoji="❤️">❤️</span>
+                            <span class="emoji" data-emoji="👍">👍</span>
+                            <span class="emoji" data-emoji="🎉">🎉</span>
+                            <span class="emoji" data-emoji="🔥">🔥</span>
+                            <span class="emoji" data-emoji="⭐">⭐</span>
+                            <span class="emoji" data-emoji="🤔">🤔</span>
+                            <span class="emoji" data-emoji="😎">😎</span>
+                            <span class="emoji" data-emoji="🚀">🚀</span>
+                            <span class="emoji" data-emoji="💻">💻</span>
+                            <span class="emoji" data-emoji="📱">📱</span>
+                            <span class="emoji" data-emoji="⚙️">⚙️</span>
+                            <span class="emoji" data-emoji="🔧">🔧</span>
+                            <span class="emoji" data-emoji="🤖">🤖</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content" id="toastMessage">Message copied to clipboard!</div>
+    </div>
+    
+    <!-- Upload Progress Modal -->
+    <div id="uploadProgressModal" class="modal">
+        <div class="modal-content">
+            <div class="upload-progress-container">
+                <h3>Đang tải ảnh lên</h3>
+                <div class="progress-bar-container">
+                    <div id="uploadProgressBar" class="progress-bar"></div>
+                </div>
+                <div id="uploadProgressText">0%</div>
+                <p class="upload-status-message">Vui lòng đợi trong khi ảnh đang được tải lên...</p>
+                <button id="cancelUploadBtn" class="btn-outline btn-sm">Hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-storage-compat.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
